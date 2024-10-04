@@ -70,10 +70,10 @@ return [
     'logger.options' => [],
 
     'kinde' => [
-        'HOST' => 'YOUR_KINDE_HOST',
+        'HOST' => 'https://burntjam2.kinde.com',
         'REDIRECT_URL' => 'http://localhost:8888/callback',
         'LOGOUT_REDIRECT_URL' => 'http://localhost:8888',
-        'CLIENT_ID' => 'YOUR_KINDE_CLIENT_ID',
-        'CLIENT_SECRET' => 'YOUR_KINDE_CLIENT_SECRET',
+        'CLIENT_ID' => '92f05a19784241fb8e38a7b0acddbc13',
+        'CLIENT_SECRET' => '0ynZykdKSHNhR93fvkbKeurCKtI5KKYAvaxVvpbpMi9EKyV4wSmdS',
     ]
 ];

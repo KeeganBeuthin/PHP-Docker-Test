@@ -120,10 +120,25 @@ class Main extends AbstractUserApi
             $this->logger->info("getPermission - isGranted " . $this->kindeClient->getPermission('read:profile')['isGranted']);
             $this->logger->info("getClaimIss " . $this->kindeClient->getClaim('iss')['value']);
 
-            return $renderer->render($response, "home.php", ['isAuthenticated' => $this->kindeClient->isAuthenticated, 'shortName' => $this->getShortName(), 'fullName' => $this->getFullName()]);
+            return $renderer->render($response, "home.php", [
+                'kindeClient' => $this->kindeClient,
+                'isAuthenticated' => $this->kindeClient->isAuthenticated,
+                'shortName' => $this->getShortName(),
+                'fullName' => $this->getFullName()
+            ]);
         } catch (Exception $e) {
             $this->logger->error("Exception when calling KindeUserApi->getUserProfile: {$e->getMessage()}");
             return $renderer->render($response, "home.php", ['isAuthenticated' => $this->kindeClient->isAuthenticated, 'shortName' => '', 'fullName' => '']);
         }
+    }
+
+    public function checkAuth(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface {
+        $isAuthenticated = $this->kindeClient->isAuthenticated;
+        $this->logger->info("isAuthenticated check result: " . ($isAuthenticated ? 'true' : 'false'));
+        $response->getBody()->write(json_encode(['isAuthenticated' => $isAuthenticated]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }

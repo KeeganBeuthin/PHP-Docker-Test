@@ -1,3 +1,28 @@
+<?php
+// At the top of the file, after any existing PHP code
+use Kinde\KindeSDK\KindeClientSDK;
+use Kinde\KindeSDK\Sdk\Enums\GrantType;
+
+// Use the passed $kindeClient object
+$kindeClient = $kindeClient ?? null;
+
+// Test isAuthenticated property
+try {
+    $isAuthenticated = $kindeClient ? $kindeClient->isAuthenticated : false;
+    $isAuthenticatedResult = "isAuthenticated value: " . ($isAuthenticated ? 'true' : 'false');
+} catch (Throwable $e) {
+    $isAuthenticatedResult = "Error accessing isAuthenticated: " . $e->getMessage();
+}
+
+// Test __get method directly
+try {
+    $isAuthenticatedViaGet = $kindeClient ? $kindeClient->__get('isAuthenticated') : false;
+    $isAuthenticatedViaGetResult = "isAuthenticated via __get: " . ($isAuthenticatedViaGet ? 'true' : 'false');
+} catch (Throwable $e) {
+    $isAuthenticatedViaGetResult = "Error accessing isAuthenticated via __get: " . $e->getMessage();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -22,6 +47,7 @@
                 <div class="header-group">
                     <a class="btn btn-dark" href="/playground" type="button">Flag Playground</a>
                     <a class="btn btn-dark" href="/create-user" type="button">Create user</a>
+                    <button class="btn btn-dark" id="checkAuth" type="button">Check Authentication</button>
                     <div class="avatar"> <?= $shortName ?></div>
                     <p class="username"><?= $fullName ?></p>
                     <a class="btn btn-dark" href="/logout" type="button">Logout</a>
@@ -50,6 +76,24 @@
             <small>© 2022 KindeAuth, Inc. All rights reserved</small>
         </div>
     </footer>
+    <script>
+        console.log(<?php echo json_encode($isAuthenticatedResult); ?>);
+        console.log(<?php echo json_encode($isAuthenticatedViaGetResult); ?>);
+
+        document.getElementById('checkAuth').addEventListener('click', function() {
+            fetch('/check-auth', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Authentication status:', data.isAuthenticated);
+                alert('Authentication status: ' + (data.isAuthenticated ? 'Authenticated' : 'Not Authenticated'));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 
 </html>

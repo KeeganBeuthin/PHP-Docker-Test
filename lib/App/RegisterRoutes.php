@@ -227,6 +227,16 @@ class RegisterRoutes
             'operationId' => 'playground',
             'responses' => [],
         ],
+        [
+            'httpMethod' => 'GET',
+            'basePathWithoutHost' => '',
+            'path' => '/check-auth',
+            'apiPackage' => 'OpenAPIServer\Api',
+            'classname' => 'AbstractUserApi',
+            'userClassname' => 'Main',
+            'operationId' => 'checkAuth',
+            'responses' => [],
+        ],
     ];
 
     /**

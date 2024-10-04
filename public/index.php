@@ -1,5 +1,8 @@
 <?php
 
+// Add this at the beginning of the file
+echo "PHP Version: " . phpversion() . "<br>";
+
 /**
  * Kinde Management API
  * PHP version 7.4
