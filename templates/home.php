@@ -86,11 +86,27 @@ try {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Authentication status:', data.isAuthenticated);
-                alert('Authentication status: ' + (data.isAuthenticated ? 'Authenticated' : 'Not Authenticated'));
+                console.log('Authentication check result:', data);
+                let message = `PHP Version: ${data.phpVersion}\n`;
+                message += `isAuthenticated: ${data.isAuthenticated}\n`;
+                message += `isAuthenticated via __get: ${data.isAuthenticatedViaGet}\n`;
+                if (data.error) {
+                    message += `Error: ${data.error}`;
+                }
+                alert(message);
+
+                // Update the page with the results
+                const resultDiv = document.getElementById('authCheckResult') || document.createElement('div');
+                resultDiv.id = 'authCheckResult';
+                resultDiv.innerHTML = `
+                    <h3>Authentication Check Result:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                document.querySelector('.container').prepend(resultDiv);
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('An error occurred while checking authentication.');
             });
         });
     </script>

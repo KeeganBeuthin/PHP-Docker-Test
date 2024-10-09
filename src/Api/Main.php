@@ -136,9 +136,26 @@ class Main extends AbstractUserApi
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface {
-        $isAuthenticated = $this->kindeClient->isAuthenticated;
-        $this->logger->info("isAuthenticated check result: " . ($isAuthenticated ? 'true' : 'false'));
-        $response->getBody()->write(json_encode(['isAuthenticated' => $isAuthenticated]));
+        $result = [
+            'isAuthenticated' => false,
+            'isAuthenticatedViaGet' => false,
+            'error' => null,
+            'phpVersion' => PHP_VERSION
+        ];
+
+        try {
+            $result['isAuthenticated'] = $this->kindeClient->isAuthenticated;
+        } catch (Throwable $e) {
+            $result['error'] = "Error accessing isAuthenticated: " . $e->getMessage();
+        }
+
+        try {
+            $result['isAuthenticatedViaGet'] = $this->kindeClient->__get('isAuthenticated');
+        } catch (Throwable $e) {
+            $result['error'] = ($result['error'] ? $result['error'] . "\n" : "") . "Error accessing isAuthenticated via __get: " . $e->getMessage();
+        }
+
+        $response->getBody()->write(json_encode($result));
         return $response->withHeader('Content-Type', 'application/json');
     }
 }
